@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
+import Base from '../layouts/Base.astro';
+import { SITE_DESCRIPTION, SITE_TITLE, postPath } from '../consts';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+<Base title={SITE_TITLE} description={SITE_DESCRIPTION}>
+	<section class="hero">
+		<h1>Finding signal in noise</h1>
+		<p>
+			25 years of software engineering — from robot vision and video codecs to
+			audio content recognition at scale.
+		</p>
+	</section>
+
+	<p>
+		I'm <strong>Werner Altewischer</strong>, MSc in applied physics and software
+		architect, currently CTO at <a href="https://beatgrid.co">Beatgrid</a>, where we
+		measure cross-media advertising using passive audio content recognition.{' '}
+		<a href="/about/">More about me →</a>
+	</p>
+
+	<h2>Writing</h2>
+	<ul class="post-list">
+		{posts.map((post) => (
+			<li>
+				<FormattedDate date={post.data.pubDate} />
+				<h2><a href={postPath(post.data.pubDate, post.id)}>{post.data.title}</a></h2>
+				<p>{post.data.description}</p>
+			</li>
+		))}
+	</ul>
+</Base>

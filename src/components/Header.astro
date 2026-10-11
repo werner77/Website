@@ -1,0 +1,16 @@
+---
+import { SITE_AUTHOR } from '../consts';
+const path = Astro.url.pathname;
+const is = (p: string) => (path === p ? 'page' : undefined);
+---
+<header class="site-header">
+	<div class="wrap">
+		<a class="brand" href="/">{SITE_AUTHOR} <span>— Behind Media</span></a>
+		<nav>
+			<a href="/" aria-current={is('/')}>Home</a>
+			<a href="/writing/" aria-current={is('/writing/')}>Writing</a>
+			<a href="/about/" aria-current={is('/about/')}>About</a>
+			<a href="/contact/" aria-current={is('/contact/')}>Contact</a>
+		</nav>
+	</div>
+</header>

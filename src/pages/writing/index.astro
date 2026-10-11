@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Base from '../../layouts/Base.astro';
+import { postPath } from '../../consts';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+<Base title="Writing" description="Posts by Werner Altewischer.">
+	<h1>Writing</h1>
+	<ul class="post-list">
+		{posts.map((post) => (
+			<li>
+				<FormattedDate date={post.data.pubDate} />
+				<h2><a href={postPath(post.data.pubDate, post.id)}>{post.data.title}</a></h2>
+				<p>{post.data.description}</p>
+			</li>
+		))}
+	</ul>
+</Base>

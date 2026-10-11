@@ -1,0 +1,10 @@
+---
+import Base from '../layouts/Base.astro';
+import { CONTACT_EMAIL } from '../consts';
+---
+<Base title="Contact" description="How to reach Werner Altewischer.">
+	<h1>Contact</h1>
+	<p>The most reliable way to reach me is by email:</p>
+	<p><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
+	<p>You can also find me on <a href="https://www.linkedin.com/in/werneraltewischer">LinkedIn</a> and <a href="https://github.com/werner77">GitHub</a>.</p>
+</Base>

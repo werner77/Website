@@ -1,0 +1,18 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
+import Base from './Base.astro';
+
+type Props = CollectionEntry<'blog'>['data'];
+const { title, description, pubDate, updatedDate } = Astro.props;
+---
+<Base title={title} description={description}>
+	<article>
+		<div class="post-header">
+			<FormattedDate date={pubDate} />
+			<h1>{title}</h1>
+			{updatedDate && <p class="meta">Updated <FormattedDate date={updatedDate} /></p>}
+		</div>
+		<div class="prose"><slot /></div>
+	</article>
+</Base>
