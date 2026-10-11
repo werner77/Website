@@ -1,10 +1,76 @@
 ---
 import Base from '../layouts/Base.astro';
-import { CONTACT_EMAIL } from '../consts';
+import { CONTACT_FORM_ENDPOINT } from '../consts';
 ---
-<Base title="Contact" description="How to reach Werner Altewischer.">
+<Base title="Contact" description="Get in touch with Werner Altewischer.">
 	<h1>Contact</h1>
-	<p>The most reliable way to reach me is by email:</p>
-	<p><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
-	<p>You can also find me on <a href="https://www.linkedin.com/in/werneraltewischer">LinkedIn</a> and <a href="https://github.com/werner77">GitHub</a>.</p>
+	<p>Send me a message and I'll get back to you.</p>
+
+	<form id="contact-form" class="contact-form" action={CONTACT_FORM_ENDPOINT} method="POST">
+		<div class="field">
+			<label for="name">Name</label>
+			<input type="text" id="name" name="name" required autocomplete="name" />
+		</div>
+		<div class="field">
+			<label for="email">Email</label>
+			<input type="email" id="email" name="email" required autocomplete="email" />
+		</div>
+		<div class="field">
+			<label for="subject">Subject</label>
+			<input type="text" id="subject" name="subject" />
+		</div>
+		<div class="field">
+			<label for="message">Message</label>
+			<textarea id="message" name="message" rows="7" required></textarea>
+		</div>
+
+		{/* honeypot: hidden from people, filled in by bots */}
+		<input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="hp" />
+		<input type="hidden" name="_subject" value="Message from behindmedia.com" />
+
+		<button type="submit">Send message</button>
+		<p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+	</form>
+
+	<p class="form-alt">
+		You can also find me on <a href="https://www.linkedin.com/in/werneraltewischer">LinkedIn</a>{' '}
+		and <a href="https://github.com/werner77">GitHub</a>.
+	</p>
 </Base>
+
+<script>
+	const form = document.getElementById('contact-form') as HTMLFormElement | null;
+	const status = document.getElementById('form-status');
+	const button = form?.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+
+	form?.addEventListener('submit', async (event) => {
+		if (!form.action.includes('formspree.io') || form.action.includes('REPLACE_WITH')) return;
+		event.preventDefault();
+		if (!status || !button) return;
+
+		button.disabled = true;
+		status.textContent = 'Sending…';
+		status.className = 'form-status';
+
+		try {
+			const response = await fetch(form.action, {
+				method: 'POST',
+				body: new FormData(form),
+				headers: { Accept: 'application/json' },
+			});
+			if (response.ok) {
+				form.reset();
+				status.textContent = 'Thanks — your message has been sent.';
+				status.className = 'form-status ok';
+			} else {
+				throw new Error(String(response.status));
+			}
+		} catch {
+			status.textContent =
+				'Something went wrong and the message was not sent. Please try again later.';
+			status.className = 'form-status error';
+		} finally {
+			button.disabled = false;
+		}
+	});
+</script>
