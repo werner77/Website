@@ -2,7 +2,7 @@ export const SITE_TITLE = 'Behind Media';
 export const SITE_AUTHOR = 'Werner Altewischer';
 export const SITE_DESCRIPTION =
 	'Software architecture, signal processing and mobile engineering.';
-export const CONTACT_EMAIL = 'hello@behindmedia.com';
+export const CONTACT_EMAIL = 'werner@behindmedia.com';
 
 /** Permalinks match the previous WordPress site: /YYYY/MM/DD/slug/ */
 export function postPath(pubDate: Date, id: string): string {
